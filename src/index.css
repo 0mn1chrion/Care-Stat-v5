@@ -1,0 +1,16 @@
+@import "tailwindcss";
+
+@theme {
+  --color-primary: #FF0000;
+  --color-accent: #FFFF00;
+  --color-accent2: #FFD700;
+  --color-accent3: #FFA500;
+  --color-dark-bg: #000000;
+  --color-light-bg: #FFF5F5;
+  --color-medium-bg: #FFEBEB;
+  --color-dark-text: #000000;
+  --color-gray-text: #666666;
+  --font-heading: "Outfit", sans-serif;
+  --font-body: "Inter", sans-serif;
+  --radius-button: 8px;
+}
