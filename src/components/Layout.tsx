@@ -100,8 +100,11 @@ export default function Layout() {
               </ul>
             </div>
           </div>
-          <div className="mt-16 pt-8 border-t border-white/10 text-center text-white/60 text-sm">
-            <p>&copy; 2024 CareStat Healthcare Services. All rights reserved.</p>
+          <div className="mt-16 pt-8 border-t border-white/10 flex flex-col md:flex-row justify-between items-center text-white/60 text-sm gap-4">
+            <p id="footer-copyright">&copy; 2026 CareStat Healthcare Services. All rights reserved.</p>
+            <div className="flex gap-6">
+              <Link to="/privacy-policy" id="footer-privacy-link" className="hover:text-white transition-colors">Privacy Policy</Link>
+            </div>
           </div>
         </div>
       </footer>

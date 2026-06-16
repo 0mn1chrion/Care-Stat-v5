@@ -1,6 +1,47 @@
+import * as React from 'react';
+import { useState } from 'react';
 import { motion } from 'motion/react';
 
 export default function Contact() {
+  const [isSubmitted, setIsSubmitted] = useState(false);
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const form = e.currentTarget;
+    
+    const nameVal = (form.querySelector('#name') as HTMLInputElement)?.value || '';
+    const phoneVal = (form.querySelector('#phone') as HTMLInputElement)?.value || '';
+    const emailVal = (form.querySelector('#email') as HTMLInputElement)?.value || '';
+    const messageVal = (form.querySelector('#message') as HTMLTextAreaElement)?.value || '';
+
+    // Map according to specifications with support for potential trailing whitespace / non-breaking space
+    const urlEncodedData = new URLSearchParams();
+    urlEncodedData.append('entry.1367859417', nameVal);
+    urlEncodedData.append('entry.1616450769', phoneVal);
+    urlEncodedData.append('entry.1616450769\xa0', phoneVal);
+    urlEncodedData.append('entry.192749382', emailVal);
+    urlEncodedData.append('entry.192749382\xa0', emailVal);
+    urlEncodedData.append('entry.1531057499', messageVal);
+
+    // Google Form formResponse endpoint
+    const formUrl = 'https://docs.google.com/forms/d/e/1FAIpQLSf6RqeN3w7HPt4RB-wkg-KtAnrGYrXtdd4FeK0e0Ef6kuUxFQ/formResponse';
+
+    // Post to Google Forms with no-cors mode, staying on current page
+    fetch(formUrl, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      body: urlEncodedData.toString(),
+    }).catch(err => {
+      console.error('Google Form submit failed:', err);
+    });
+
+    // Immediately trigger Success alerts and set success display status
+    alert("Success, Our team will contact you soon.");
+    setIsSubmitted(true);
+  };
   return (
     <>
       <section className="bg-medium-bg py-20 relative overflow-hidden">
@@ -75,30 +116,45 @@ export default function Contact() {
 
               <div className="bg-white rounded-3xl p-8 shadow-2xl border border-gray-100 relative">
                 <div className="absolute top-0 right-0 w-32 h-32 bg-primary rounded-bl-full opacity-5 pointer-events-none"></div>
-                <h3 className="text-2xl font-bold font-heading mb-6">Send us a Message</h3>
-                <form className="space-y-4" onSubmit={(e) => { e.preventDefault(); alert("Thanks for your interest! A CareStat representative will contact you soon."); }}>
-                  <div>
-                    <label htmlFor="name" className="block text-sm font-bold text-gray-700 mb-1">Full Name</label>
-                    <input type="text" id="name" placeholder="John Doe" className="w-full bg-light-bg border-none rounded-xl px-4 py-3 focus:ring-2 focus:ring-primary outline-none transition-all" required />
-                  </div>
-                  <div className="grid grid-cols-2 gap-4">
-                    <div>
-                      <label htmlFor="phone" className="block text-sm font-bold text-gray-700 mb-1">Phone</label>
-                      <input type="tel" id="phone" placeholder="(555) 123-4567" className="w-full bg-light-bg border-none rounded-xl px-4 py-3 focus:ring-2 focus:ring-primary outline-none transition-all" required />
+                {isSubmitted ? (
+                  <div className="text-center py-12 animate-fade-in relative z-10" id="contact-success-state">
+                    <div className="w-20 h-20 bg-primary/10 text-primary rounded-full flex items-center justify-center mx-auto mb-6 shadow-md">
+                      <i className="fa-solid fa-circle-check text-4xl"></i>
                     </div>
-                    <div>
-                      <label htmlFor="email" className="block text-sm font-bold text-gray-700 mb-1">Email</label>
-                      <input type="email" id="email" placeholder="john@example.com" className="w-full bg-light-bg border-none rounded-xl px-4 py-3 focus:ring-2 focus:ring-primary outline-none transition-all" />
-                    </div>
+                    <h3 className="text-3xl font-bold font-heading mb-4 text-dark-bg">Success</h3>
+                    <p className="text-gray-text text-lg">Our team will contact you soon.</p>
                   </div>
-                  <div>
-                    <label htmlFor="message" className="block text-sm font-bold text-gray-700 mb-1">How can we help?</label>
-                    <textarea id="message" rows={4} placeholder="Tell us a little about your situation..." className="w-full bg-light-bg border-none rounded-xl px-4 py-3 focus:ring-2 focus:ring-primary outline-none transition-all" required></textarea>
-                  </div>
-                  <button type="submit" className="w-full bg-dark-bg text-white font-bold py-4 rounded-xl hover:bg-primary transition-colors text-lg">
-                    Request Call Back
-                  </button>
-                </form>
+                ) : (
+                  <>
+                    <h3 className="text-2xl font-bold font-heading mb-6">Send us a Message</h3>
+                    <form className="space-y-4" onSubmit={handleSubmit}>
+                      <div>
+                        <label htmlFor="name" className="block text-sm font-bold text-gray-700 mb-1">Full Name</label>
+                        <input type="text" id="name" name="entry.1367859417" placeholder="John Doe" className="w-full bg-light-bg border-none rounded-xl px-4 py-3 focus:ring-2 focus:ring-primary outline-none transition-all" required />
+                      </div>
+                      <div className="grid grid-cols-2 gap-4">
+                        <div>
+                          <label htmlFor="phone" className="block text-sm font-bold text-gray-700 mb-1">Phone</label>
+                          <input type="tel" id="phone" name="entry.1616450769" placeholder="(555) 123-4567" className="w-full bg-light-bg border-none rounded-xl px-4 py-3 focus:ring-2 focus:ring-primary outline-none transition-all" required />
+                        </div>
+                        <div>
+                          <label htmlFor="email" className="block text-sm font-bold text-gray-700 mb-1">Email</label>
+                          <input type="email" id="email" name="entry.192749382" placeholder="john@example.com" className="w-full bg-light-bg border-none rounded-xl px-4 py-3 focus:ring-2 focus:ring-primary outline-none transition-all" />
+                        </div>
+                      </div>
+                      <div>
+                        <label htmlFor="message" className="block text-sm font-bold text-gray-700 mb-1">How can we help?</label>
+                        <textarea id="message" name="entry.1531057499" rows={4} placeholder="Tell us a little about your situation..." className="w-full bg-light-bg border-none rounded-xl px-4 py-3 focus:ring-2 focus:ring-primary outline-none transition-all" required></textarea>
+                        <p id="contact-form-message-disclaimer" className="text-sm text-gray-text mt-2 leading-relaxed">
+                          Please provide a brief description of how we can assist you. Do not include sensitive medical information in this form.
+                        </p>
+                      </div>
+                      <button type="submit" className="w-full bg-dark-bg text-white font-bold py-4 rounded-xl hover:bg-primary transition-colors text-lg">
+                        Request Call Back
+                      </button>
+                    </form>
+                  </>
+                )}
               </div>
             </motion.div>
           </div>

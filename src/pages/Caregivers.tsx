@@ -52,9 +52,18 @@ export default function Caregivers() {
         <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} className="max-w-4xl mx-auto px-4">
           <h2 className="text-3xl lg:text-5xl font-bold font-heading mb-8">Join Our Team</h2>
           <p className="text-xl text-white/90 mb-10">Are you a dedicated healthcare professional looking to make a real difference in Addison? We are always looking for top talent.</p>
-          <Link to="/contact" className="bg-white text-primary px-10 py-5 rounded-button font-bold text-lg shadow-xl hover:bg-dark-bg hover:text-white transition-all">
+          <a 
+            id="apply-today-btn"
+            href="https://docs.google.com/forms/d/e/1FAIpQLSfKNexsjqqmmO5LGZv6YeiAI-dLm8WC-JFPoi0pkWmTvbjTFg/viewform?usp=publish-editor" 
+            target="_blank" 
+            rel="noopener noreferrer" 
+            className="bg-white text-primary px-10 py-5 rounded-button font-bold text-lg shadow-xl hover:bg-dark-bg hover:text-white transition-all inline-block"
+          >
             Apply Today
-          </Link>
+          </a>
+          <p id="apply-today-certification" className="text-base text-white/80 mt-6 max-w-2xl mx-auto font-body leading-relaxed">
+            I certify that the information provided is accurate to the best of my knowledge and understand that submitting this application does not guarantee employment.
+          </p>
         </motion.div>
       </section>
     </>
